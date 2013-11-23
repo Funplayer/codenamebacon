@@ -1,0 +1,421 @@
+=Code=
+foo = (hello(x)(y))(z)(1 - 2) - 1
+=Tokens=
+1: IDENTIFIER: foo
+1: EQUAL: =
+1: LPAREN: (
+1: IDENTIFIER: hello
+1: LPAREN: (
+1: IDENTIFIER: x
+1: RPAREN: )
+1: LPAREN: (
+1: IDENTIFIER: y
+1: RPAREN: )
+1: RPAREN: )
+1: LPAREN: (
+1: IDENTIFIER: z
+1: RPAREN: )
+1: LPAREN: (
+1: NUMBER: 1
+1: MINUS: -
+1: NUMBER: 2
+1: RPAREN: )
+1: MINUS: -
+1: NUMBER: 1
+HEYYEAH #<Token:0x1926d29 @line=0, @data="=", @type=#<TokenType:0x3ca4ae @match="=", @name="EQUAL", @type=3>, @column=4>
+HEYYEAH #<Token:0x1838098 @line=0, @data="(", @type=#<TokenType:0x6f8c58 @match="(", @name="LPAREN", @type=3>, @column=12>
+HEYYEAH #<Token:0xd8d88d @line=0, @data=")", @type=#<TokenType:0x713658 @match=")", @name="RPAREN", @type=3>, @column=14>
+HEYYEAH #<Token:0xb74118 @line=0, @data=")", @type=#<TokenType:0x713658 @match=")", @name="RPAREN", @type=3>, @column=17>
+HEYYEAH #<Token:0xb08658 @line=0, @data="(", @type=#<TokenType:0x6f8c58 @match="(", @name="LPAREN", @type=3>, @column=19>
+HEYYEAH #<Token:0xbdbe4f @line=0, @data=")", @type=#<TokenType:0x713658 @match=")", @name="RPAREN", @type=3>, @column=21>
+HEYYEAH #<Token:0x90ca10 @line=0, @data="-", @type=#<TokenType:0x1c1ef16 @match="-", @name="MINUS", @type=3>, @column=25>
+HEYYEAH #<Token:0x400fd9 @line=0, @data=")", @type=#<TokenType:0x713658 @match=")", @name="RPAREN", @type=3>, @column=28>
+HEYYEAH nil
+
+=AST=
+ProgramT {
+    statements: {
+        AssignmentT {
+            left:
+            MultiExpressionT {
+                type: EXPRESSION
+                operators: []
+                expressions: {
+                    MultiExpressionT {
+                        type: ADDITION
+                        operators: []
+                        expressions: {
+                            MultiExpressionT {
+                                type: MULTIPLICATION
+                                operators: []
+                                expressions: {
+                                    UnaryExpressionT {
+                                        type: LEFT_TERMINAL_UNARY
+                                        operators: []
+                                        expression:
+                                        UnaryExpressionT {
+                                            type: RIGHT_TERMINAL_UNARY
+                                            operators: []
+                                            expression:
+                                            UnaryExpressionT {
+                                                type: NONTERMINAL_UNARY
+                                                operators:
+                                                expression:
+                                                MultiExpressionT {
+                                                    type: OBJECT_ENTRY
+                                                    operators: []
+                                                    expressions: {
+                                                        AtomicFactorT {
+                                                            data: foo
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            right:
+            MultiExpressionT {
+                type: EXPRESSION
+                operators: []
+                expressions: {
+                    MultiExpressionT {
+                        type: ADDITION
+                        operators: ["-"]
+                        expressions: {
+                            MultiExpressionT {
+                                type: MULTIPLICATION
+                                operators: []
+                                expressions: {
+                                    UnaryExpressionT {
+                                        type: LEFT_TERMINAL_UNARY
+                                        operators: []
+                                        expression:
+                                        UnaryExpressionT {
+                                            type: RIGHT_TERMINAL_UNARY
+                                            operators: []
+                                            expression:
+                                            UnaryExpressionT {
+                                                type: NONTERMINAL_UNARY
+                                                operators:
+                                                    TupleUnaryOperator {
+                                                        type: CALL
+                                                        tuple: {
+                                                            MultiExpressionT {
+                                                                type: EXPRESSION
+                                                                operators: []
+                                                                expressions: {
+                                                                    MultiExpressionT {
+                                                                        type: ADDITION
+                                                                        operators: []
+                                                                        expressions: {
+                                                                            MultiExpressionT {
+                                                                                type: MULTIPLICATION
+                                                                                operators: []
+                                                                                expressions: {
+                                                                                    UnaryExpressionT {
+                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                        operators: []
+                                                                                        expression:
+                                                                                        UnaryExpressionT {
+                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                            operators: []
+                                                                                            expression:
+                                                                                            UnaryExpressionT {
+                                                                                                type: NONTERMINAL_UNARY
+                                                                                                operators:
+                                                                                                expression:
+                                                                                                MultiExpressionT {
+                                                                                                    type: OBJECT_ENTRY
+                                                                                                    operators: []
+                                                                                                    expressions: {
+                                                                                                        AtomicFactorT {
+                                                                                                            data: z
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                    TupleUnaryOperator {
+                                                        type: CALL
+                                                        tuple: {
+                                                            MultiExpressionT {
+                                                                type: EXPRESSION
+                                                                operators: []
+                                                                expressions: {
+                                                                    MultiExpressionT {
+                                                                        type: ADDITION
+                                                                        operators: ["-"]
+                                                                        expressions: {
+                                                                            MultiExpressionT {
+                                                                                type: MULTIPLICATION
+                                                                                operators: []
+                                                                                expressions: {
+                                                                                    UnaryExpressionT {
+                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                        operators: []
+                                                                                        expression:
+                                                                                        UnaryExpressionT {
+                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                            operators: []
+                                                                                            expression:
+                                                                                            UnaryExpressionT {
+                                                                                                type: NONTERMINAL_UNARY
+                                                                                                operators:
+                                                                                                expression:
+                                                                                                MultiExpressionT {
+                                                                                                    type: OBJECT_ENTRY
+                                                                                                    operators: []
+                                                                                                    expressions: {
+                                                                                                        AtomicFactorT {
+                                                                                                            data: 1
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            MultiExpressionT {
+                                                                                type: MULTIPLICATION
+                                                                                operators: []
+                                                                                expressions: {
+                                                                                    UnaryExpressionT {
+                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                        operators: []
+                                                                                        expression:
+                                                                                        UnaryExpressionT {
+                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                            operators: []
+                                                                                            expression:
+                                                                                            UnaryExpressionT {
+                                                                                                type: NONTERMINAL_UNARY
+                                                                                                operators:
+                                                                                                expression:
+                                                                                                MultiExpressionT {
+                                                                                                    type: OBJECT_ENTRY
+                                                                                                    operators: []
+                                                                                                    expressions: {
+                                                                                                        AtomicFactorT {
+                                                                                                            data: 2
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+
+                                                expression:
+                                                MultiExpressionT {
+                                                    type: OBJECT_ENTRY
+                                                    operators: []
+                                                    expressions: {
+                                                        ParenFactorT {
+                                                            expression:
+                                                            MultiExpressionT {
+                                                                type: EXPRESSION
+                                                                operators: []
+                                                                expressions: {
+                                                                    MultiExpressionT {
+                                                                        type: ADDITION
+                                                                        operators: []
+                                                                        expressions: {
+                                                                            MultiExpressionT {
+                                                                                type: MULTIPLICATION
+                                                                                operators: []
+                                                                                expressions: {
+                                                                                    UnaryExpressionT {
+                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                        operators: []
+                                                                                        expression:
+                                                                                        UnaryExpressionT {
+                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                            operators: []
+                                                                                            expression:
+                                                                                            UnaryExpressionT {
+                                                                                                type: NONTERMINAL_UNARY
+                                                                                                operators:
+                                                                                                    TupleUnaryOperator {
+                                                                                                        type: CALL
+                                                                                                        tuple: {
+                                                                                                            MultiExpressionT {
+                                                                                                                type: EXPRESSION
+                                                                                                                operators: []
+                                                                                                                expressions: {
+                                                                                                                    MultiExpressionT {
+                                                                                                                        type: ADDITION
+                                                                                                                        operators: []
+                                                                                                                        expressions: {
+                                                                                                                            MultiExpressionT {
+                                                                                                                                type: MULTIPLICATION
+                                                                                                                                operators: []
+                                                                                                                                expressions: {
+                                                                                                                                    UnaryExpressionT {
+                                                                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                                                                        operators: []
+                                                                                                                                        expression:
+                                                                                                                                        UnaryExpressionT {
+                                                                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                                                                            operators: []
+                                                                                                                                            expression:
+                                                                                                                                            UnaryExpressionT {
+                                                                                                                                                type: NONTERMINAL_UNARY
+                                                                                                                                                operators:
+                                                                                                                                                expression:
+                                                                                                                                                MultiExpressionT {
+                                                                                                                                                    type: OBJECT_ENTRY
+                                                                                                                                                    operators: []
+                                                                                                                                                    expressions: {
+                                                                                                                                                        AtomicFactorT {
+                                                                                                                                                            data: x
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                    TupleUnaryOperator {
+                                                                                                        type: CALL
+                                                                                                        tuple: {
+                                                                                                            MultiExpressionT {
+                                                                                                                type: EXPRESSION
+                                                                                                                operators: []
+                                                                                                                expressions: {
+                                                                                                                    MultiExpressionT {
+                                                                                                                        type: ADDITION
+                                                                                                                        operators: []
+                                                                                                                        expressions: {
+                                                                                                                            MultiExpressionT {
+                                                                                                                                type: MULTIPLICATION
+                                                                                                                                operators: []
+                                                                                                                                expressions: {
+                                                                                                                                    UnaryExpressionT {
+                                                                                                                                        type: LEFT_TERMINAL_UNARY
+                                                                                                                                        operators: []
+                                                                                                                                        expression:
+                                                                                                                                        UnaryExpressionT {
+                                                                                                                                            type: RIGHT_TERMINAL_UNARY
+                                                                                                                                            operators: []
+                                                                                                                                            expression:
+                                                                                                                                            UnaryExpressionT {
+                                                                                                                                                type: NONTERMINAL_UNARY
+                                                                                                                                                operators:
+                                                                                                                                                expression:
+                                                                                                                                                MultiExpressionT {
+                                                                                                                                                    type: OBJECT_ENTRY
+                                                                                                                                                    operators: []
+                                                                                                                                                    expressions: {
+                                                                                                                                                        AtomicFactorT {
+                                                                                                                                                            data: y
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+
+                                                                                                expression:
+                                                                                                MultiExpressionT {
+                                                                                                    type: OBJECT_ENTRY
+                                                                                                    operators: []
+                                                                                                    expressions: {
+                                                                                                        AtomicFactorT {
+                                                                                                            data: hello
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            MultiExpressionT {
+                                type: MULTIPLICATION
+                                operators: []
+                                expressions: {
+                                    UnaryExpressionT {
+                                        type: LEFT_TERMINAL_UNARY
+                                        operators: []
+                                        expression:
+                                        UnaryExpressionT {
+                                            type: RIGHT_TERMINAL_UNARY
+                                            operators: []
+                                            expression:
+                                            UnaryExpressionT {
+                                                type: NONTERMINAL_UNARY
+                                                operators:
+                                                expression:
+                                                MultiExpressionT {
+                                                    type: OBJECT_ENTRY
+                                                    operators: []
+                                                    expressions: {
+                                                        AtomicFactorT {
+                                                            data: 1
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
