@@ -1,0 +1,25 @@
+class Boot
+    int color
+    
+    do init
+        int l = someArray.length
+        for int i = 0 to 1000 loop
+            
+        end
+    end
+    
+    do this
+        int color
+    end
+end
+
+x[2][3] = 2
+
+do T getFromArray(T)(T[] array, index) {
+    return array[index]
+}
+
+getFromArray!int(myIntArray, 1337)
+getFromArray!int(myIntArray, 27)
+getFromArray!long(myLongArray, 1337)
+getFromArray!string(myStringArray, 1337)

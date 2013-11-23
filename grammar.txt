@@ -1,0 +1,147 @@
+class
+	:	'class' IDENT ('extends' IDENT)? ('implements' (IDENT)+)?
+		(	function
+		|	declareVar
+		)*
+		'end'
+	;
+	
+function
+	:	'do' IDENT? IDENT
+		'(' typedArgs ')'
+		statement* 'end'
+	;
+
+assignment
+	: 	expresion '=' expression
+	;
+
+statement
+	:	function
+	|	class
+	|	assignment
+	|	branch
+	|	while
+	|	until
+	|	for
+	|	foreach
+	|	invoke
+	|	getIndex
+	;
+
+invoke
+	:	expression call
+	;
+
+getIndex
+	:	expression index
+	;
+
+branch
+	:	'if' expression 'then' statement*
+		('elseif' expression 'then' statement*)*
+		('else' statement*)? 'end'
+	;
+	
+while
+	:	'while' expression 'loop' 
+		statement* 
+		'end'
+	;
+	
+until
+	:	'until' 
+		statement* 
+		expression 'end'
+	;
+	
+for
+	:	'for' declareVar 'to' expression ('step' expression)? 'loop'
+		statement*
+		'end'
+	;
+	
+foreach
+	:	'foreach' declareVar 'in' expression 'loop'
+		statement*
+		'end'
+	;
+	
+expression
+	: 	compare (COMPARE_OP compare)+
+	;
+
+compare
+	:	term (TERM_OP term)+
+	;
+
+term
+	:	terminalUnary (FACTOR_OP terminalUnary)+
+	;
+
+terminalUnary
+	:	(LUNARY_OP)* nonTermUnary (RUNARY_OP)*
+	;
+	
+nonTermUnary
+	:	objectEntry
+		(	index
+		|	call
+		)*
+	;
+
+objectEntry
+	:	factor ('.' factor)*
+	;	
+
+factor
+	:	atomicFactor
+	|	parenFactor
+	|	arrayLiteral
+	;
+
+atomicFactor
+	:	IDENT
+	|	NUMBER
+	|	STRING
+	;
+
+parenFactor
+	:	'(' expression ')'
+	;
+
+arrayLiteral
+	:	IDENT|"auto" '[' tuple ']'
+	;
+
+tuple
+	:	expression? (',' expression)*
+		
+typedArgs
+	:	(typeVar)? (',' typeVar)*
+	;
+
+call
+	:	'(' tuple ')'
+	;
+
+index
+	:	'[' tuple ']'
+	;
+
+declareVar
+	:	IDENT
+	|	'auto' IDENT
+		'=' expression
+	;
+	
+typeVar
+	: 	IDENT
+	|	'auto' IDENT
+	;
+
+COMPARE_OP	: 	'=='|'<'|'<='|'>'|'>='|'!=';
+TERM_OP		: 	'+'|'-';
+FACTOR_OP	: 	'*'|'/';
+LUNARY_OP	: 	'not';
+RUNARY_OP	:	'NOTHING YET';
