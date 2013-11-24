@@ -162,7 +162,7 @@ class Tokenizer
                 nextChar
             end
             # Breaks if it hits the dreaded empty string.
-            if getChar == ""
+            if getChar.nil?
                 break
             end
             # If character is a letter.
@@ -223,7 +223,8 @@ class Tokenizer
                 nextChar
                 # While the string is in the operators add and increment character.
                 while(Tokens::OPERATORS.include?(m))
-                    m += getChar
+                    m += getChar if !getChar.nil?
+                    m += " " if getChar.nil?
                     nextChar
                 end
                 # Jump back to the last character
@@ -243,7 +244,7 @@ class Tokenizer
             return @code[@index] if !@code[@index].nil?
         end
         # If nil return empty string.
-        return ""
+        return nil
     end
     
     # Subtracts one character position.
