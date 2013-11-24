@@ -37,6 +37,8 @@ class Parser
         if accept(Tokens::EQUAL)
             nextToken()
             s = assignment(startExpression)
+        elsif accept(Tokens::IDENT)
+            s = varDeclaration(startExpression)
         end
 
         return s
@@ -49,6 +51,21 @@ class Parser
         a.left = left
         a.right = expression()
         return a
+    end
+
+    # Construct a variable declaration with an optional assignment.
+    # Entry at variable name identifier.
+    def varDeclaration(typeExpression)
+        d = VarDeclarationT.new()
+        d.typeExpression = typeExpression
+        expect(Tokens::IDENT)
+        d.ident = getTokenData()
+        nextToken()
+        if accept(Tokens::EQUAL)
+            nextToken()
+            d.right = expression()
+        end
+        return d
     end
     
     # Construct a multi expression.

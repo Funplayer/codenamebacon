@@ -131,6 +131,16 @@ class AssignmentT < StatementT
     end
 end
 
+class VarDeclarationT < SyntaxTree
+    attr_accessor :typeExpression
+    attr_accessor :ident
+    attr_accessor :right
+
+    def initialize
+        super(:typeExpression, :ident, :right)
+    end
+end
+
 class ExpressionT < SyntaxTree
     attr_accessor :type
     
