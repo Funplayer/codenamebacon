@@ -79,7 +79,7 @@ class SyntaxTree
                 if not (self.is_a?(UnaryExpressionT) and self.type == ExpressionType::NONTERMINAL_UNARY)
                     s << "#{" " * (depth + 1)}operators: #{child.map { |token| token.match }}\n"
                 else
-                    s << "#{" " * (depth + 1)}operators:\n"
+                    s << "#{" " * (depth + 1)}operators: {\n"
                     for tuple in operators
                         s << "#{tuple.to_s(depth + 2)}"
                     end
@@ -111,7 +111,7 @@ class SyntaxTree
     end
 end
 
-class ProgramT < SyntaxTree
+class BlockT < SyntaxTree
     attr_accessor :statements
     def initialize
         super(:statements)
@@ -131,13 +131,27 @@ class AssignmentT < StatementT
     end
 end
 
-class VarDeclarationT < SyntaxTree
+class VarDeclarationT < StatementT
     attr_accessor :typeExpression
     attr_accessor :ident
     attr_accessor :right
 
     def initialize
         super(:typeExpression, :ident, :right)
+    end
+end
+
+class BranchT < StatementT
+    attr_accessor :ifCond
+    attr_accessor :ifBlock
+    attr_accessor :elseifConds
+    attr_accessor :elseifBlocks
+    attr_accessor :elseBlock
+
+    def initialize
+        super(:ifCond, :ifBlock, :elseifConds, :elseifBlocks, :elseBlock)
+        @elseifConds = []
+        @elseifBlocks = []
     end
 end
 

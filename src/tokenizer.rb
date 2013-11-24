@@ -96,7 +96,7 @@ class Tokens
     DIV_EQUAL   = TokenType.new(TokenCategory::OPERATOR,   "DIV_EQUAL",   "/=")
     EQUAL       = TokenType.new(TokenCategory::OPERATOR,   "EQUAL",       "=")
     EQUALS      = TokenType.new(TokenCategory::OPERATOR,   "EQUALS",      "==")
-    INEQUAL     = TokenType.new(TokenCategory::OPERATOR,   "INEQUAL",     "!=")   
+    INEQUAL     = TokenType.new(TokenCategory::OPERATOR,   "INEQUAL",     "!=")
     GREATEQUAL  = TokenType.new(TokenCategory::OPERATOR,   "GREATEQUAL",  ">=")
     LESSEQUAL   = TokenType.new(TokenCategory::OPERATOR,   "LESSEQUAL",   "<=")
     LBRACE      = TokenType.new(TokenCategory::OPERATOR,   "LBRACE",      "{")

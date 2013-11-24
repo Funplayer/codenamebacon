@@ -22,7 +22,7 @@ class Parser
     
     # Parse all statements.
     def parse
-        p = ProgramT.new()
+        p = BlockT.new()
         while getToken
             p.statements.push(statement())
         end
@@ -31,17 +31,21 @@ class Parser
     
     # Construct a statement.
     def statement
-        s = nil
-        startExpression = expression()
+        case getTokenType()
+        when Tokens::IF
+            return branch()
+        else
+            startExpression = expression()
 
-        if accept(Tokens::EQUAL)
-            nextToken()
-            s = assignment(startExpression)
-        elsif accept(Tokens::IDENT)
-            s = varDeclaration(startExpression)
+            if accept(Tokens::EQUAL)
+                nextToken()
+                return assignment(startExpression)
+            elsif accept(Tokens::IDENT)
+                return varDeclaration(startExpression)
+            end
         end
 
-        return s
+        throw ParseException.new(getToken(), Tokens::IF)
     end
     
     # Construct an assignment statement.
@@ -66,6 +70,44 @@ class Parser
             d.right = expression()
         end
         return d
+    end
+
+    # Construct a branch statement.
+    def branch
+        b = BranchT.new()
+        expect(Tokens::IF)
+        nextToken()
+        b.ifCond = expression()
+        expect(Tokens::THEN)
+        nextToken()
+        b.ifBlock = block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
+
+        while accept(Tokens::ELSEIF)
+            nextToken()
+            b.elseifConds.push(expression())
+            expect(Tokens::THEN)
+            nextToken()
+            b.elseifBlocks.push(block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_))
+        end
+
+        if accept(Tokens::ELSE)
+            nextToken()
+            b.elseBlock = block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
+        end
+
+        nextToken()
+        return b
+    end
+
+    # Construct a statement filled block.
+    # Entry at first statement.
+    # Returns on stop token.
+    def block(*stop)
+        b = BlockT.new()
+        while !stop.include?(getTokenType())
+            b.statements.push(statement())
+        end
+        return b
     end
     
     # Construct a multi expression.
