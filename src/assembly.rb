@@ -16,7 +16,7 @@ class RawAssembly
 	# Data Types #
 	## ----------- ##
 	## 32 Bit Mode ##
-	BYTE = AsmDataType.new('WORD', 'signed', 8)
+	BYTE = AsmDataType.new('BYTE', 'signed', 8)
 	WORD = AsmDataType.new('WORD', 'signed', 16)
 	DWORD = AsmDataType.new('DWORD', 'signed', 32)
 	## ----------- ##
@@ -58,17 +58,20 @@ class RawAssembly
 	
 	# -------------- #
 	# Mnemonic Types #
-	MOV = AsmMnemonic.new('mov')
-	XCHG = AsmMnemonic.new('xchg')
-	ADD = AsmMnemonic.new('add')
-	SUB = AsmMnemonic.new('sub')
-	MUL = AsmMnemonic.new('mul')
-	IMUL = AsmMnemonic.new('imul')
-	DIV = AsmMnemonic.new('div')
-	IDIV = AsmMnemonic.new('idiv')
+	BIT32 = {
+		'mov'  => AsmMnemonic.new('mov',['I','R','M'],['I','R','M'])
+		'xchg' => AsmMnemonic.new('xchg')
+		'add'  => AsmMnemonic.new('add')
+		'sub'  => AsmMnemonic.new('sub')
+		'mul'  => AsmMnemonic.new('mul')
+		'imul' => AsmMnemonic.new('imul')
+		'div'  => AsmMnemonic.new('div')
+		'idiv' => AsmMnemonic.new('idiv')
+	}
 	
 end
 
+# Overall data structure for the class virtualization #
 class AsmClass
 	attr_accessor :name
 	attr_accessor :stack
@@ -83,6 +86,7 @@ class AsmClass
 	end
 end
 
+# Singular static directive, a few are required #
 class AsmStaticDirective < AsmClass
 	attr_accessor :type
 	def initialize(type)
@@ -90,6 +94,7 @@ class AsmStaticDirective < AsmClass
 	end
 end
 
+# A singular register 
 class AsmRegister
 	attr_accessor :type
 	attr_accessor :bits
@@ -100,7 +105,7 @@ class AsmRegister
 		@bits = bits
 	end
 end
-
+# --------------------------------------------------------------- #
 class AsmMnemonic
 	attr_accessor :type
 	def initialize(type)
@@ -146,3 +151,31 @@ class AsmInstruction < AsmProcedure
 	end
 end
 
+# --------------------------------------------------------------- #
+# Data stored in memory, the :left expression post data
+# .DATA
+# memID TYPE val
+class DataMemory
+	attr_accessor :type
+	def initialize(type, use)
+
+	end
+end
+
+# Data required as a suppliment for an arithmetic expression
+# registerType
+class DataRegister
+	attr_accessor :type
+	def initialize(type, use)
+
+	end
+end
+
+# Data declared in statement with a type, such as 5, 7, "bacon"
+class DataImmediate
+	attr_accessor :type
+	attr_accessor :val
+	def initialize(type = "", val = "")
+
+	end
+end
