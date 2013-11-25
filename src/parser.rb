@@ -135,6 +135,25 @@ class Parser
         return f
     end
 
+    def constructorDeclaration
+        c = ConstructorDeclarationT.new
+
+        expect(Tokens::DO)
+        nextToken
+        expect(Tokens::IDENT)
+
+        if getTokenData != "init"
+            throw ParseException.new(Tokens::IDENT, "Constructor name must be \"init\".")
+        end
+
+        nextToken
+        parameters(Tokens::LPAREN, Tokens::RPAREN, c.paramTypes, c.paramNames)
+        c.block = block(Tokens::END_)
+        nextToken
+
+        return c
+    end
+
     def classDeclaration
         c = ClassDeclarationT.new
         expect(Tokens::CLASS)

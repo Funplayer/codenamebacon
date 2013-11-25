@@ -66,6 +66,8 @@ class AtomicType
 end
 
 class SyntaxTree
+    attr_accessor :compileInfo
+
     def initialize(*accessors)
         @accessors = accessors
     end
@@ -151,6 +153,18 @@ class FunctionDeclarationT < StatementT
 
     def initialize
         super(:returnType, :name, :paramTypes, :paramNames, :block)
+        @paramTypes = []
+        @paramNames = []
+    end
+end
+
+class ConstructorDeclarationT < StatementT
+    attr_accessor :paramTypes
+    attr_accessor :paramNames
+    attr_accessor :block
+
+    def initialize
+        super(:paramTypes, :paramNames, :block)
         @paramTypes = []
         @paramNames = []
     end
