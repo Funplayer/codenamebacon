@@ -247,14 +247,16 @@ end
 class FactorType
     STRING = 0
     NUMBER = 1
-    IDENT = 2
-    PAREN = 3
+    IDENT  = 2
+    PAREN  = 3
+    SELF   = 4
 
     NAMES = [
         "STRING",
         "NUMBER",
         "IDENT",
         "PAREN",
+        "SELF",
     ]
 end
 
@@ -271,7 +273,8 @@ class AtomicFactorT < FactorT
     TYPES = {
         Tokens::STRING => FactorType::STRING,
         Tokens::NUMBER => FactorType::NUMBER,
-        Tokens::IDENT => FactorType::IDENT,
+        Tokens::IDENT  => FactorType::IDENT,
+        Tokens::SELF   => FactorType::SELF,
     }
 
     attr_accessor :data

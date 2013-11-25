@@ -64,6 +64,7 @@ class Tokens
     CLASS       = TokenType.new(TokenCategory::KEYWORD,    "CLASS",       "class")
     EXTENDS     = TokenType.new(TokenCategory::KEYWORD,    "EXTENDS",     "extends")
     IMPLEMENTS  = TokenType.new(TokenCategory::KEYWORD,    "IMPLEMENTS",  "implements")
+    SELF        = TokenType.new(TokenCategory::KEYWORD,    "SELF",        "self")
     DO          = TokenType.new(TokenCategory::KEYWORD,    "DO",          "do")
     IF          = TokenType.new(TokenCategory::KEYWORD,    "IF",          "if")
     ELSE        = TokenType.new(TokenCategory::KEYWORD,    "ELSE",        "else")

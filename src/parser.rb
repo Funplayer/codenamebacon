@@ -34,12 +34,17 @@ class Parser
     end
     
     # Construct a statement.
-    def statement
+    def statement(isClassContext = false)
         case getTokenType()
         when Tokens::IF
             return branch()
         when Tokens::DO
             return functionDeclaration
+        when Tokens::SELF
+            if isClassContext
+                return constructorDeclaration
+            end
+            return statementWithExpression
         when Tokens::RETURN
             r = ReturnT.new
             nextToken
@@ -51,22 +56,26 @@ class Parser
         when Tokens::CLASS
             return classDeclaration
         else
-            startExpression = expression()
-
-            if accept(Tokens::EQUAL)
-                nextToken()
-                return assignment(startExpression)
-            elsif accept(Tokens::IDENT)
-                return varDeclaration(startExpression)
-            else
-                # TODO: Throw error if expression is not a call.
-                c = CallT.new()
-                c.expression = startExpression
-                return c
-            end
+            return statementWithExpression
         end
 
         throw ParseException.new(getToken(), "Cannot read next statement.")
+    end
+
+    def statementWithExpression
+        startExpression = expression()
+
+        if accept(Tokens::EQUAL)
+            nextToken()
+            return assignment(startExpression)
+        elsif accept(Tokens::IDENT)
+            return varDeclaration(startExpression)
+        else
+            # TODO: Throw error if expression is not a call.
+            c = CallT.new()
+            c.expression = startExpression
+            return c
+        end
     end
     
     # Construct an assignment statement.
@@ -101,19 +110,19 @@ class Parser
         b.ifCond = expression()
         expect(Tokens::THEN)
         nextToken()
-        b.ifBlock = block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
+        b.ifBlock = block(false, Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
 
         while accept(Tokens::ELSEIF)
             nextToken()
             b.elseifConds.push(expression())
             expect(Tokens::THEN)
             nextToken()
-            b.elseifBlocks.push(block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_))
+            b.elseifBlocks.push(block(false, Tokens::ELSEIF, Tokens::ELSE, Tokens::END_))
         end
 
         if accept(Tokens::ELSE)
             nextToken()
-            b.elseBlock = block(Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
+            b.elseBlock = block(false, Tokens::ELSEIF, Tokens::ELSE, Tokens::END_)
         end
 
         nextToken()
@@ -130,7 +139,7 @@ class Parser
         f.name = getTokenData
         nextToken
         parameters(Tokens::LPAREN, Tokens::RPAREN, f.paramTypes, f.paramNames)
-        f.block = block(Tokens::END_)
+        f.block = block(false, Tokens::END_)
         nextToken
 
         return f
@@ -140,17 +149,11 @@ class Parser
     def constructorDeclaration
         c = ConstructorDeclarationT.new
 
-        expect(Tokens::DO)
-        nextToken
-        expect(Tokens::IDENT)
-
-        if getTokenData != "init"
-            throw ParseException.new(Tokens::IDENT, "Constructor name must be \"init\".")
-        end
-
+        expect(Tokens::SELF)
         nextToken
         parameters(Tokens::LPAREN, Tokens::RPAREN, c.paramTypes, c.paramNames)
-        c.block = block(Tokens::END_)
+        puts("#{getToken.inspect}")
+        c.block = block(false, Tokens::END_)
         nextToken
 
         return c
@@ -192,7 +195,7 @@ class Parser
             end
         end
 
-        c.block = block(Tokens::END_)
+        c.block = block(true, Tokens::END_)
         nextToken
 
         return c
@@ -201,10 +204,10 @@ class Parser
     # Construct a statement filled block.
     # Entry at first statement.
     # Returns on stop token.
-    def block(*stop)
+    def block(isClassContext, *stop)
         b = BlockT.new()
         while !stop.include?(getTokenType())
-            b.statements.push(statement())
+            b.statements.push(statement(isClassContext))
         end
         return b
     end
