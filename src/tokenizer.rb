@@ -62,6 +62,8 @@ class Tokens
     
     # Keywords #
     CLASS       = TokenType.new(TokenCategory::KEYWORD,    "CLASS",       "class")
+    EXTENDS     = TokenType.new(TokenCategory::KEYWORD,    "EXTENDS",     "extends")
+    IMPLEMENTS  = TokenType.new(TokenCategory::KEYWORD,    "IMPLEMENTS",  "implements")
     DO          = TokenType.new(TokenCategory::KEYWORD,    "DO",          "do")
     IF          = TokenType.new(TokenCategory::KEYWORD,    "IF",          "if")
     ELSE        = TokenType.new(TokenCategory::KEYWORD,    "ELSE",        "else")
@@ -76,6 +78,7 @@ class Tokens
     OR          = TokenType.new(TokenCategory::KEYWORD,    "OR",          "or")
     AND         = TokenType.new(TokenCategory::KEYWORD,    "AND",         "and")
     NOT         = TokenType.new(TokenCategory::KEYWORD,    "NOT",         "not")
+    NEW         = TokenType.new(TokenCategory::KEYWORD,    "NEW",         "new")
     BEGIN_      = TokenType.new(TokenCategory::KEYWORD,    "BEGIN",       "begin")
     RESCUE      = TokenType.new(TokenCategory::KEYWORD,    "RESCUE",      "rescue")
     END_        = TokenType.new(TokenCategory::KEYWORD,    "END",         "end")

@@ -1,7 +1,7 @@
 class Boot
     int color
     
-    do init
+    do this
         int l = someArray.length
         for int i = 0 to 1000 loop
             
@@ -23,3 +23,7 @@ getFromArray!int(myIntArray, 1337)
 getFromArray!int(myIntArray, 27)
 getFromArray!long(myLongArray, 1337)
 getFromArray!string(myStringArray, 1337)
+
+do int add(int x, int y)
+    return x + y
+end
