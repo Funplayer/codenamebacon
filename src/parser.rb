@@ -3,7 +3,11 @@ require "syntax.rb"
 
 class ParseException < Exception
     def initialize(got, expected)
+        if expected.is_a? TokenType
             super("Expected #{expected.name} at line #{(got.line + 1)}, column #{(got.column + 1)}. Got #{got.type.name}.")
+        elsif expected.is_a? String
+            super("Error at line #{(got.line + 1)}, column #{(got.column + 1)}. #{expected} Got #{got.type.name}.")
+        end
     end
 end
 
@@ -34,6 +38,18 @@ class Parser
         case getTokenType()
         when Tokens::IF
             return branch()
+        when Tokens::DO
+            return functionDeclaration
+        when Tokens::RETURN
+            r = ReturnT.new
+            nextToken
+            if accept(Tokens::END_)
+                return r
+            end
+            r.expression = expression
+            return r
+        when Tokens::CLASS
+            return classDeclaration
         else
             startExpression = expression()
 
@@ -42,10 +58,15 @@ class Parser
                 return assignment(startExpression)
             elsif accept(Tokens::IDENT)
                 return varDeclaration(startExpression)
+            else
+                # TODO: Throw error if expression is not a call.
+                c = CallT.new()
+                c.expression = startExpression
+                return c
             end
         end
 
-        throw ParseException.new(getToken(), Tokens::IF)
+        throw ParseException.new(getToken(), "Cannot read next statement.")
     end
     
     # Construct an assignment statement.
@@ -63,7 +84,7 @@ class Parser
         d = VarDeclarationT.new()
         d.typeExpression = typeExpression
         expect(Tokens::IDENT)
-        d.ident = getTokenData()
+        d.name = getTokenData()
         nextToken()
         if accept(Tokens::EQUAL)
             nextToken()
@@ -97,6 +118,62 @@ class Parser
 
         nextToken()
         return b
+    end
+
+    def functionDeclaration
+        f = FunctionDeclarationT.new
+
+        expect(Tokens::DO)
+        nextToken
+        f.returnType = expression
+        f.name = getTokenData
+        nextToken
+        parameters(Tokens::LPAREN, Tokens::RPAREN, f.paramTypes, f.paramNames)
+        f.block = block(Tokens::END_)
+        nextToken
+
+        return f
+    end
+
+    def classDeclaration
+        c = ClassDeclarationT.new
+        expect(Tokens::CLASS)
+        nextToken
+        expect(Tokens::IDENT)
+        c.name = getTokenData
+        nextToken
+
+        if accept(Tokens::LPAREN)
+            nextToken
+            c.typeParameters.push(getTokenData)
+            nextToken
+            while accept(Tokens::COMMA)
+                nextToken
+                c.typeParameters = tuple(Tokens::LPAREN, Tokens::RPAREN)
+                nextToken
+            end
+            expect(Tokens::RPAREN)
+            nextToken
+        end
+
+        if accept(Tokens::EXTENDS)
+            nextToken
+            c.extendType = expression
+        end
+
+        if accept(Tokens::IMPLEMENTS)
+            nextToken
+            c.implementTypes.push(expression)
+            while accept(Tokens::COMMA)
+                nextToken
+                c.implementTypes.push(expression)
+            end
+        end
+
+        c.block = block(Tokens::END_)
+        nextToken
+
+        return c
     end
 
     # Construct a statement filled block.
@@ -188,7 +265,7 @@ class Parser
             f.expression = expression()
         else
             if !AtomicFactorT::TYPES.include?(getTokenType())
-                throw ParseException.new(getToken(), Tokens::STRING)
+                throw ParseException.new(getToken(), "Expected a string or number.")
             end
             f = AtomicFactorT.new(getTokenType(), getTokenData())
         end
@@ -209,6 +286,34 @@ class Parser
         expect(right)
         nextToken()
         return expressions
+    end
+
+    # Read a comma-separated type tuple.
+    def parameters(left, right, types, names)
+        expect(left)
+        nextToken()
+        types.push(expression)
+        names.push(getTokenData)
+        nextToken
+        while accept(Tokens::COMMA)
+            nextToken
+            types.push(expression)
+            names.push(getTokenData)
+            nextToken
+        end
+        expect(right)
+        nextToken
+    end
+
+    def call?(e)
+        for i in 0...ExpressionType::RIGHT_TERMINAL_UNARY
+            if e.operators.size > 0
+                return false
+            end
+            e = e.expressions[0]
+        end
+
+        
     end
     
     # CONVENIENCE

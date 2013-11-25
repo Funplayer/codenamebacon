@@ -20,6 +20,7 @@ class ExpressionType
         ],
         [   # Left terminal unary operators.
             Tokens::NOT,
+            Tokens::NEW,
         ],
         [   # Right terminal unary operators.
             # TODO
@@ -133,11 +134,25 @@ end
 
 class VarDeclarationT < StatementT
     attr_accessor :typeExpression
-    attr_accessor :ident
+    attr_accessor :name
     attr_accessor :right
 
     def initialize
-        super(:typeExpression, :ident, :right)
+        super(:typeExpression, :name, :right)
+    end
+end
+
+class FunctionDeclarationT < StatementT
+    attr_accessor :returnType
+    attr_accessor :name
+    attr_accessor :paramTypes
+    attr_accessor :paramNames
+    attr_accessor :block
+
+    def initialize
+        super(:returnType, :name, :paramTypes, :paramNames, :block)
+        @paramTypes = []
+        @paramNames = []
     end
 end
 
@@ -152,6 +167,36 @@ class BranchT < StatementT
         super(:ifCond, :ifBlock, :elseifConds, :elseifBlocks, :elseBlock)
         @elseifConds = []
         @elseifBlocks = []
+    end
+end
+
+class ReturnT < StatementT
+    attr_accessor :expression
+
+    def initialize
+        super(:expression)
+    end
+end
+
+class CallT < StatementT
+    attr_accessor :expression
+
+    def initialize
+        super(:expression)
+    end
+end
+
+class ClassDeclarationT < StatementT
+    attr_accessor :name
+    attr_accessor :typeParameters
+    attr_accessor :extendType
+    attr_accessor :implementTypes
+    attr_accessor :block
+
+    def initialize
+        super(:name, :typeParameters, :extendType, :implementTypes, :block)
+        @typeParameters = []
+        @implementTypes = []
     end
 end
 
