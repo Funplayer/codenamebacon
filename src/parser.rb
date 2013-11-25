@@ -120,6 +120,7 @@ class Parser
         return b
     end
 
+    # Construct a function declaration.
     def functionDeclaration
         f = FunctionDeclarationT.new
 
@@ -135,6 +136,7 @@ class Parser
         return f
     end
 
+    # Construct a constructor declaration.
     def constructorDeclaration
         c = ConstructorDeclarationT.new
 
@@ -154,6 +156,7 @@ class Parser
         return c
     end
 
+    # Construct a class declaration.
     def classDeclaration
         c = ClassDeclarationT.new
         expect(Tokens::CLASS)
@@ -296,8 +299,15 @@ class Parser
     # Read a comma-separated tuple.
     def tuple(left, right)
         expect(left)
-        nextToken()
-        expressions = [expression()]
+        nextToken
+
+        if accept(right)
+            nextToken
+            return []
+        end
+
+        expressions = [expression]
+
         while accept(Tokens::COMMA)
             nextToken()
             expressions.push(expression())
@@ -311,6 +321,12 @@ class Parser
     def parameters(left, right, types, names)
         expect(left)
         nextToken()
+
+        if accept(right)
+            nextToken
+            return
+        end
+
         types.push(expression)
         names.push(getTokenData)
         nextToken
